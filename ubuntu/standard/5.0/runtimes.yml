@@ -50,7 +50,7 @@ runtimes:
       1.16:
         commands:
           - echo "Installing Go version 1.16 ..."
-          - goenv global  $GOLANG_16_VERSION          
+          - goenv global  $GOLANG_16_VERSION
   python:
     versions:
       3.7:
@@ -79,6 +79,10 @@ runtimes:
         commands:
           - echo "Installing PHP version 8.0 ..."
           - phpenv global $PHP_80_VERSION
+      8.1:
+        commands:
+          - echo "Installing PHP version 8.1 ..."
+          - phpenv global $PHP_81_VERSION
   ruby:
     versions:
       2.6:

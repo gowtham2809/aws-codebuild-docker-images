@@ -262,6 +262,7 @@ RUN set -ex \
 ENV PHP_73_VERSION="7.3.25"
 ENV PHP_74_VERSION="7.4.13"
 ENV PHP_80_VERSION="8.0.0"
+ENV PHP_81_VERSION="8.1.3"
 
 RUN curl -L https://raw.githubusercontent.com/phpenv/phpenv-installer/master/bin/phpenv-installer | bash
 ENV PATH="/root/.phpenv/shims:/root/.phpenv/bin:$PATH"
@@ -277,6 +278,10 @@ RUN echo "memory_limit = 1G;" >> "/root/.phpenv/versions/$PHP_74_VERSION/etc/con
 COPY tools/runtime_configs/php/$PHP_80_VERSION /root/.phpenv/plugins/php-build/share/php-build/definitions/$PHP_80_VERSION
 RUN phpenv install $PHP_80_VERSION; rm -rf /tmp/*; phpenv global $PHP_80_VERSION
 RUN echo "memory_limit = 1G;" >> "/root/.phpenv/versions/$PHP_80_VERSION/etc/conf.d/memory.ini"
+
+COPY tools/runtime_configs/php/$PHP_81_VERSION /root/.phpenv/plugins/php-build/share/php-build/definitions/$PHP_81_VERSION
+RUN phpenv install $PHP_81_VERSION; rm -rf /tmp/*; phpenv global $PHP_81_VERSION
+RUN echo "memory_limit = 1G;" >> "/root/.phpenv/versions/$PHP_81_VERSION/etc/conf.d/memory.ini"
 
 # Install Composer globally
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/bin --filename=composer
@@ -434,7 +439,7 @@ FROM runtimes_n_corretto AS std_v5
 # Activate runtime versions specific to image version.
 RUN n $NODE_14_VERSION
 RUN pyenv  global $PYTHON_39_VERSION
-RUN phpenv global $PHP_80_VERSION
+RUN phpenv global $PHP_81_VERSION
 RUN rbenv  global $RUBY_27_VERSION
 RUN goenv global  $GOLANG_15_VERSION
 
