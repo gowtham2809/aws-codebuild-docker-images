@@ -203,8 +203,10 @@ RUN set -ex \
 
 ENV NODE_12_VERSION="12.22.2"
 ENV NODE_14_VERSION="14.17.2"
+ENV NODE_16_VERSION="16.14.2"
 
-RUN     n $NODE_14_VERSION && npm install --save-dev -g -f grunt && npm install --save-dev -g -f grunt-cli && npm install --save-dev -g -f webpack \
+RUN     n $NODE_16_VERSION && npm install --save-dev -g -f grunt && npm install --save-dev -g -f grunt-cli && npm install --save-dev -g -f webpack \
+     && n $NODE_14_VERSION && npm install --save-dev -g -f grunt && npm install --save-dev -g -f grunt-cli && npm install --save-dev -g -f webpack \
      && n $NODE_12_VERSION && npm install --save-dev -g -f grunt && npm install --save-dev -g -f grunt-cli && npm install --save-dev -g -f webpack \
      && curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | apt-key add - \
      && echo "deb https://dl.yarnpkg.com/debian/ stable main" | tee /etc/apt/sources.list.d/yarn.list \
@@ -285,6 +287,12 @@ RUN echo "memory_limit = 1G;" >> "/root/.phpenv/versions/$PHP_81_VERSION/etc/con
 
 # Install Composer globally
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/bin --filename=composer
+
+# Install MongoDB
+RUN apt install php-dev php-pear -y
+RUN pecl install mongodb
+RUN echo "extension=mongodb.so" >> `php --ini | grep "Loaded Configuration" | sed -e "s|.*:\s*||"`
+
 #****************      END PHP     ****************************************************
 
 #****************     GOLANG     ****************************************************
@@ -437,7 +445,7 @@ VOLUME /var/lib/docker
 FROM runtimes_n_corretto AS std_v5
 
 # Activate runtime versions specific to image version.
-RUN n $NODE_14_VERSION
+RUN n $NODE_16_VERSION
 RUN pyenv  global $PYTHON_39_VERSION
 RUN phpenv global $PHP_81_VERSION
 RUN rbenv  global $RUBY_27_VERSION
